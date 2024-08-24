@@ -48,3 +48,38 @@ resource "google_compute_url_map" "spa" {
     }
   }
 }
+
+resource "google_compute_url_map" "https_redirect" {
+  depends_on = [
+    google_compute_backend_service.spa,
+  ]
+  name            = "${local.project_name}-https-redirect"
+  default_url_redirect {
+    https_redirect = true
+    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
+    strip_query = false
+  }
+}
+
+resource "google_compute_target_https_proxy" "spa" {
+  depends_on = [
+    google_compute_url_map.spa,
+    google_compute_managed_ssl_certificate.www,
+  ]
+  name    = local.project_name
+  url_map = google_compute_url_map.spa.self_link
+  ssl_certificates = [
+    google_compute_managed_ssl_certificate.www.id,
+  ]
+}
+
+resource "google_compute_global_forwarding_rule" "https_redirect" {
+  depends_on = [
+    google_compute_target_https_proxy.spa,
+    google_compute_global_address.spa
+  ]
+  name       = "${local.project_name}-https-redirect"
+  target = google_compute_target_https_proxy.spa.id
+  port_range = "80"
+  ip_address = google_compute_global_address.spa.address
+}
