@@ -12,12 +12,12 @@ resource "google_compute_backend_service" "spa" {
   backend {
     group = google_compute_region_network_endpoint_group.spa.id
   }
-  compression_mode                = "AUTOMATIC"
+  compression_mode = "AUTOMATIC"
   connection_draining_timeout_sec = 300
 }
 
 resource "google_compute_managed_ssl_certificate" "www" {
-  name = join("-", [local.project_name, "website", "www"])
+  name    = join("-", [local.project_name, "www"])
   managed {
     domains = [
       "hello.hermesv.dev"
@@ -35,10 +35,10 @@ resource "google_compute_url_map" "spa" {
     hosts        = [
       "hello.hermesv.dev"
     ]
-    path_matcher = "hello"
+    path_matcher = "www"
   }
   path_matcher {
-    name            = "hello"
+    name            = "www"
     default_service = google_compute_backend_service.spa.id
     path_rule {
       paths = [
@@ -46,18 +46,6 @@ resource "google_compute_url_map" "spa" {
       ]
       service = google_compute_backend_service.spa.id
     }
-  }
-}
-
-resource "google_compute_url_map" "https_redirect" {
-  depends_on = [
-    google_compute_backend_service.spa,
-  ]
-  name            = "${local.project_name}-https-redirect"
-  default_url_redirect {
-    https_redirect = true
-    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
-    strip_query = false
   }
 }
 
@@ -73,13 +61,13 @@ resource "google_compute_target_https_proxy" "spa" {
   ]
 }
 
-resource "google_compute_global_forwarding_rule" "https_redirect" {
+resource "google_compute_global_forwarding_rule" "spa" {
   depends_on = [
     google_compute_target_https_proxy.spa,
     google_compute_global_address.spa
   ]
-  name       = "${local.project_name}-https-redirect"
-  target = google_compute_target_https_proxy.spa.id
-  port_range = "80"
+  name       = local.project_name
+  target     = google_compute_target_https_proxy.spa.self_link
   ip_address = google_compute_global_address.spa.address
+  port_range = "443"
 }
