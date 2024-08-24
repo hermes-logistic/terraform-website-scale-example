@@ -22,6 +22,10 @@ resource "google_cloud_run_service" "spa" {
   location = var.region
   metadata {
     namespace = data.terraform_remote_state.project.outputs.project_id
+    annotations = {
+      "run.googleapis.com/client-name" = "terraform"
+      "run.googleapis.com/ingress"     = "internal-and-cloud-load-balancing"
+    }
   }
   template {
     spec {
@@ -35,10 +39,17 @@ resource "google_cloud_run_service" "spa" {
     percent         = 100
     latest_revision = true
   }
-  lifecycle {
-    ignore_changes = [
-      metadata.0.annotations,
-      template.0.spec.0.containers.0.image
-    ]
+}
+
+resource "google_compute_region_network_endpoint_group" "spa" {
+  depends_on = [
+    google_cloud_run_service.spa
+  ]
+  name                  = join("-", [local.environment, local.project_name])
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+
+  cloud_run {
+    service = google_cloud_run_service.spa.name
   }
 }
