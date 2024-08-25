@@ -32,6 +32,14 @@ resource "google_cloud_run_service" "spa" {
       service_account_name = google_service_account.spa.email
       containers {
         image = "gcr.io/google-containers/hpa-example"
+        startup_probe {
+          timeout_seconds = 240
+          period_seconds = 240
+          failure_threshold = 1
+          tcp_socket {
+            port = 80
+          }
+        }
       }
     }
   }
