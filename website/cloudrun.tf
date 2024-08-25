@@ -31,13 +31,19 @@ resource "google_cloud_run_service" "spa" {
     spec {
       service_account_name = google_service_account.spa.email
       containers {
-        image = "us-docker.pkg.dev/cloudrun/container/hello"
+        image = "gcr.io/google-containers/hpa-example"
       }
     }
   }
   traffic {
     percent         = 100
     latest_revision = true
+  }
+  lifecycle {
+    ignore_changes = [
+      template[0].spec[0].containers[0].image,
+      metadata[0].annotations["run.googleapis.com/client-name"]
+    ]
   }
 }
 
