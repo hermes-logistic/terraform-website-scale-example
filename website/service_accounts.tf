@@ -1,4 +1,7 @@
 resource "google_service_account" "spa" {
+  depends_on = [
+    google_project_service.iam
+  ]
   account_id   = join("-", [local.project_name, local.environment])
   display_name = "Service Account for Cloud Run website"
 }
