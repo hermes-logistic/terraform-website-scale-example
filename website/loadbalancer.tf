@@ -1,4 +1,7 @@
 resource "google_compute_global_address" "spa" {
+  depends_on = [
+    google_project_service.iam
+  ]
   name = "website"
 }
 
@@ -36,6 +39,9 @@ resource "google_compute_url_map" "spa" {
 }
 
 resource "google_compute_managed_ssl_certificate" "spa" {
+  depends_on = [
+    google_project_service.iam
+  ]
   name    = join("-", [local.project_name, "app"])
   managed {
     domains = [

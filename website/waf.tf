@@ -1,4 +1,7 @@
 resource "google_compute_security_policy" "backend" {
+  depends_on = [
+    google_project_service.iam
+  ]
   type = "CLOUD_ARMOR"
   name = join("-", ["waf", local.project_name, local.environment])
 
@@ -60,6 +63,9 @@ resource "google_compute_security_policy" "backend" {
 }
 
 resource "google_compute_security_policy" "edge" {
+  depends_on = [
+    google_project_service.iam
+  ]
   type = "CLOUD_ARMOR_EDGE"
   name = join("-", ["edge", local.project_name, local.environment])
 
