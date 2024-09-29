@@ -1,4 +1,7 @@
 resource "google_artifact_registry_repository" "registry" {
+  depends_on = [
+    google_project_service.artifactregistry
+  ]
   project       = data.terraform_remote_state.project.outputs.project_id
   location      = var.region
   repository_id = local.project_name
