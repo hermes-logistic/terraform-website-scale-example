@@ -9,5 +9,17 @@ services:
       TF_VAR_billing_account_id:
     working_dir: /terraform/gcp/project
     volumes:
-      - "./terraform/gcp/project:/terraform/gcp/project"
+      - "./project:/terraform/gcp/project"
+      - "./.terraformrc:/root/.terraformrc"
+  website:
+    image: hashicorp/terraform:1.9.4
+    environment:
+      GOOGLE_CREDENTIALS:
+      TF_VAR_project:
+      TF_VAR_org_id:
+      TF_VAR_folder_id:
+      TF_VAR_billing_account_id:
+    working_dir: /terraform/website
+    volumes:
+      - "./website:/terraform/website"
       - "./.terraformrc:/root/.terraformrc"
