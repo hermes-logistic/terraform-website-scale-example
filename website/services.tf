@@ -1,7 +1,4 @@
 resource "google_project_service" "run" {
-  depends_on = [
-    google_project_service.iam,
-  ]
   project = data.terraform_remote_state.project.outputs.project_id
   service = "run.googleapis.com"
 
