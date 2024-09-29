@@ -24,3 +24,18 @@ resource "google_project_service" "usage" {
 
   disable_dependent_services = true
 }
+
+resource "google_project_service" "iam" {
+  depends_on = [
+    google_project_service.usage
+  ]
+  project = google_project.project.project_id
+  service = "iam.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
