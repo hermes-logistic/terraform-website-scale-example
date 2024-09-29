@@ -7,7 +7,7 @@ resource "google_project_service" "cloudresourcemanager" {
     update = "40m"
   }
 
-  disable_dependent_services = true
+  disable_dependent_services = false
 }
 
 resource "google_project_service" "usage" {
@@ -22,7 +22,7 @@ resource "google_project_service" "usage" {
     update = "40m"
   }
 
-  disable_dependent_services = true
+  disable_dependent_services = false
 }
 
 resource "google_project_service" "iam" {
