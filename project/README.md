@@ -1,4 +1,4 @@
-Website CPU Scale Cloud Run
+Google Project creator
 ===========
 
 Requirements
