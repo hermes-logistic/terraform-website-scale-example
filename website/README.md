@@ -88,6 +88,17 @@ permissions:
 ```bash
 $ gcloud iam roles create [CUSTOM_ROLE_NAME] --project=[PROJECT_ID] --file=custom_role.yaml
 ```
+- Create Service Account
+```bash
+$ gcloud iam service-accounts create [SERVICE_ACCOUNT_NAME] \
+--display-name="[SERVICE_ACCOUNT_DISPLAY_NAME]"
+```
+- Add IAM Policy Binding
+```bash
+$ gcloud projects add-iam-policy-binding [PROJECT_ID] \
+--member serviceAccount:[SERVICE_ACCOUNT_EMAIL] \
+--role roles/[CUSTOM_ROLE_NAME]
+```
 
 [Create ODIC Provider Flow authentication](https://astrafy.io/the-hub/blog/technical/authenticate-to-google-cloud-from-terraform-cloud-using-workload-identity)
 ---
@@ -106,17 +117,6 @@ $ gcloud iam workload-identity-pools providers create-oidc terraform \
 --issuer-uri="https://app.terraform.io" \
 --attribute-mapping="google.subject=assertion.sub,attribute.terraform_workspace_name=assertion.terraform_workspace_name" \
 --attribute-condition="assertion.terraform_organization_name==\"[ORG_NAME]\""
-```
-- Create Service Account
-```bash
-º gcloud iam service-accounts create [SERVICE_ACCOUNT_NAME] \
---display-name="[SERVICE_ACCOUNT_DISPLAY_NAME]"
-```
-- Add IAM Policy Binding
-```bash
-$ gcloud projects add-iam-policy-binding [PROJECT_ID] \
---member serviceAccount:[SERVICE_ACCOUNT_EMAIL] \
---role roles/[CUSTOM_ROLE_NAME]
 ```
 - Add IAM Policy Binding to Workload Identity Pool
 ```bash
