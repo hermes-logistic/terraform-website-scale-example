@@ -17,3 +17,17 @@ resource "google_project_iam_member" "network" {
   role    = "roles/networkmanagement.admin"
   member  = "serviceAccount:${google_service_account.network.email}"
 }
+
+resource "google_project_iam_member" "network-compute" {
+  depends_on = [ google_service_account.network ]
+  project = google_project.project.project_id
+  role    = "roles/compute.networkAdmin"
+  member  = "serviceAccount:${google_service_account.network.email}"
+}
+
+resource "google_project_iam_member" "registry" {
+  depends_on = [ google_service_account.network ]
+  project = google_project.project.project_id
+  role    = "roles/artifactregistry.admin"
+  member  = "serviceAccount:${google_service_account.network.email}"
+}
