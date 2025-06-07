@@ -1,6 +1,7 @@
 resource "google_service_account" "network" {
   depends_on = [ google_iam_workload_identity_pool_provider.oidc-provider-pool ]
   account_id = "terraform-network"
+  project = google_project.project.project_id
 }
 
 resource "google_service_account_iam_member" "sa-member" {
@@ -10,8 +11,9 @@ resource "google_service_account_iam_member" "sa-member" {
   member = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.terraform-pool.name}/attribute.terraform_workspace_name/gcp-network-development-${local.project_name}"
 }
 
-resource "google_project_iam_member" "eventreceiver" {
-  project = var.project
+resource "google_project_iam_member" "network" {
+  depends_on = [ google_service_account.network ]
+  project = google_project.project.project_id
   role    = "roles/networkmanagement.admin"
   member  = "serviceAccount:${google_service_account.network.email}"
 }
