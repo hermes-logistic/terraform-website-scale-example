@@ -39,3 +39,48 @@ resource "google_project_service" "iam" {
 
   disable_dependent_services = true
 }
+
+resource "google_project_service" "networking" {
+  depends_on = [
+    google_project_service.iam
+  ]
+  project = google_project.project.project_id
+  service = "servicenetworking.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "connector" {
+  depends_on = [
+    google_project_service.networking
+  ]
+  project = google_project.project.project_id
+  service = "vpcaccess.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "registry" {
+  depends_on = [
+    google_project_service.connector
+  ]
+  project = google_project.project.project_id
+  service = "artifactregistry.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
