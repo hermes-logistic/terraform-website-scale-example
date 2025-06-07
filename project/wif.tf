@@ -1,5 +1,5 @@
 resource "google_iam_workload_identity_pool" "terraform-pool" {
-  depends_on = [ google_project_service ]
+  depends_on = [ google_project_service.iam ]
   workload_identity_pool_id = "terraform-pool"
   display_name              = "terraform-pool"
   description               = "Workload identity pool for Terraform"
