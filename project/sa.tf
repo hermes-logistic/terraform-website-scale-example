@@ -25,6 +25,13 @@ resource "google_project_iam_member" "network-compute" {
   member  = "serviceAccount:${google_service_account.network.email}"
 }
 
+resource "google_project_iam_member" "network-vpc" {
+  depends_on = [ google_service_account.network ]
+  project = google_project.project.project_id
+  role    = "roles/vpcaccess.admin"
+  member  = "serviceAccount:${google_service_account.network.email}"
+}
+
 resource "google_project_iam_member" "registry" {
   depends_on = [ google_service_account.network ]
   project = google_project.project.project_id
