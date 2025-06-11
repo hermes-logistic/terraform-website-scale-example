@@ -52,3 +52,11 @@ resource "google_project_iam_member" "compute" {
   member   = "serviceAccount:${google_service_account.network["keycloak"].email}"
   depends_on = [google_service_account.network]
 }
+
+resource "google_project_iam_member" "sql" {
+  count    = contains(values(var.services)[*].name, "keycloak") ? 1 : 0
+  project  = google_project.project.project_id
+  role     = "roles/cloudsql.admin"
+  member   = "serviceAccount:${google_service_account.network["keycloak"].email}"
+  depends_on = [google_service_account.network]
+}
