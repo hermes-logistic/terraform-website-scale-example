@@ -85,7 +85,7 @@ resource "google_project_service" "registry" {
   disable_dependent_services = true
 }
 
-resource "google_project_service" "registry" {
+resource "google_project_service" "sql" {
   depends_on = [
     google_project_service.registry
   ]
