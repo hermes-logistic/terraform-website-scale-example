@@ -20,6 +20,20 @@ variable "billing_account_id" {
   description = "value of the billing account id"
 }
 
+variable "services" {
+  type = map(object({
+    name = string
+  }))
+  default = {
+    "network" = {
+      name = "network"
+    },
+    "keycloak" = {
+      name = "keycloak"
+    }
+  }
+}
+
 locals {
   project_name = element(split("-", terraform.workspace), 1)
   environment  = element(split("-", terraform.workspace), 2)
