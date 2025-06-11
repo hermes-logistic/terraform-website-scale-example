@@ -6,6 +6,8 @@ output "wif_provider" {
   value = google_iam_workload_identity_pool_provider.oidc-provider-pool.name
 }
 
-output "service_account" {
-  value = google_service_account.network[each.key].email
+output "service_account_emails" {
+  value = {
+    for k, v in google_service_account.network : k => v.email
+  }
 }
