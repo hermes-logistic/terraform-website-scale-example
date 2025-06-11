@@ -8,7 +8,7 @@ resource "google_service_account" "network" {
 resource "google_service_account_iam_member" "sa-member" {
   depends_on = [ google_service_account.network ]
   for_each = var.services
-  service_account_id = google_service_account.network.name
+  service_account_id = google_service_account.network.name[each.key]
   role = "roles/iam.serviceAccountTokenCreator"
   member = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.terraform-pool.name}/attribute.terraform_workspace_name/gcp-${each.value.name}-development-${local.project_name}"
 }
