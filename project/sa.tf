@@ -68,3 +68,11 @@ resource "google_project_iam_member" "sql-client" {
   member   = "serviceAccount:${google_service_account.network["keycloak"].email}"
   depends_on = [google_service_account.network]
 }
+
+resource "google_service_account_iam_member" "kc-client" {
+  count    = contains(values(var.services)[*].name, "keycloak") ? 1 : 0
+  service_account_id = google_service_account.network["keycloak"].name
+  role     = "roles/iam.serviceAccountUser"
+  member   = "serviceAccount:${google_service_account.network["keycloak"].email}"
+  depends_on = [google_service_account.network]
+}
