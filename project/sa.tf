@@ -45,6 +45,22 @@ resource "google_project_iam_member" "registry" {
   depends_on = [google_service_account.network]
 }
 
+resource "google_project_iam_member" "network-dns-admin" {
+  count    = contains(values(var.services)[*].name, "network") ? 1 : 0
+  project  = google_project.project.project_id
+  role     = "roles/dns.admin"
+  member   = "serviceAccount:${google_service_account.network["network"].email}"
+  depends_on = [google_service_account.network]
+}
+
+resource "google_project_iam_member" "network-dns-reader" {
+  count    = contains(values(var.services)[*].name, "network") ? 1 : 0
+  project  = google_project.project.project_id
+  role     = "roles/dns.reader"
+  member   = "serviceAccount:${google_service_account.network["network"].email}"
+  depends_on = [google_service_account.network]
+}
+
 resource "google_project_iam_member" "compute" {
   count    = contains(values(var.services)[*].name, "keycloak") ? 1 : 0
   project  = google_project.project.project_id
