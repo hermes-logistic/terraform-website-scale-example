@@ -2,7 +2,7 @@ data "google_client_config" "default" {}
 
 variable "project" {
   type        = string
-  description = "value of the project"
+  description = "value of the project, project name must be 4 to 30 characters with lowercase and uppercase letters, numbers, hyphen, single-quote, double-quote, space, and exclamation point"
 }
 
 variable "org_id" {
