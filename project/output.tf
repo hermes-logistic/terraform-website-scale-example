@@ -11,3 +11,8 @@ output "service_account" {
     for k, v in google_service_account.network : k => v.email
   }
 }
+
+output "apigateway_api_id" {
+  value = google_api_gateway_api.api.api_id
+  
+}

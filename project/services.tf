@@ -129,3 +129,49 @@ resource "google_project_service" "appengineflex" {
 
   disable_dependent_services = true
 }
+
+resource "google_project_service" "apigateway" {
+  depends_on = [
+    google_project_service.registry
+  ]
+  project = google_project.project.project_id
+  service = "apigateway.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "servicemanagement" {
+  depends_on = [
+    google_project_service.registry
+  ]
+  project = google_project.project.project_id
+  service = "servicemanagement.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
+
+
+resource "google_project_service" "servicecontrol" {
+  depends_on = [
+    google_project_service.registry
+  ]
+  project = google_project.project.project_id
+  service = "servicecontrol.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_dependent_services = true
+}
