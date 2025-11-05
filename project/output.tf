@@ -6,6 +6,14 @@ output "wif_provider" {
   value = google_iam_workload_identity_pool_provider.oidc-provider-pool.name
 }
 
+output "wif_pool_github" {
+  value = google_iam_workload_identity_pool.github-pool.id
+}
+
+output "wif_provider_github" {
+  value = google_iam_workload_identity_pool_provider.github-provider-pool.name
+}
+
 output "service_account" {
   value = {
     for k, v in google_service_account.network : k => v.email
